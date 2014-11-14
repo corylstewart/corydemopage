@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if error_user_name %}
+    {% set user_text_placeholder = error_user_name %}
+{% elif user_name %}
+    {% set user_text_placeholder = user_name %}
+{% else %}
+    {% set user_text_placeholder = "Username" %}
+{% endif %}
+
+{% if error_password %}
+    {% set password_text_placeholder = error_password %}
+{% else %}
+    {% set password_text_placeholder = "Password" %}
+{% endif %}
+
+{% if error_verify %}
+    {% set verify_text_placeholder = error_verify %}
+{% else %}
+    {% set verify_text_placeholder = "Password Confirm" %}
+{% endif %}
+
+{% if error_email %}
+    {% set email_text_placeholder = error_email %}
+{% elif email %}
+    {% set email_text_placeholder = email %}
+{% else %}
+    {% set email_text_placeholder = "Email address" %}
+{% endif %}
+
+<form method="post" class="form-signin login-signin" role="form">
+    <h2 class="form-signin-heading">Create user</h2>
+    <input type="text" class="form-control" placeholder="{{user_text_placeholder}}" required="" autofocus=""
+            id="user_name_signup_id" name="user_name_signup_name">
+    <input type="password" class="form-control" placeholder="{{password_text_placeholder}}" required=""
+            id="password_signup_id" name="password_signup_name">
+    <input type="password" class="form-control" placeholder="{{verify_text_placeholder}}" required=""
+            id="password_match_signup_id" name="password_match_signup_name">
+    <input type="email" class="form-control" placeholder="{{email_text_placeholder}}" required=""
+            id="email_signup_id" name="email_signup_name">
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+</form>
+
+{% endblock %}

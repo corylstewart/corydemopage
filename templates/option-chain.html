@@ -1,0 +1,288 @@
+{% extends "base.html" %}
+{% block content %}
+<link type="text/css" rel="stylesheet" href="/static/option.css" />
+<script type="text/javascript" src="/static/option_pricer.js"></script>
+
+<script>
+    function show_instructions(){
+        var instruct_elem = document.getElementById('show_instructions_id');
+        console.log(instruct_elem.value);
+        if (instruct_elem.value == 'Show Instructions'){
+            instruct_elem.value = 'Hide Instructions';
+            document.getElementById('instructions_id').style.display = '';
+        }
+        else {
+            instruct_elem.value = 'Show Instructions';
+            document.getElementById('instructions_id').style.display = 'none';
+        }
+    }
+</script>
+
+<form method="post">
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3><input type="button" id="show_instructions_id"
+                       onclick="show_instructions()" value="Show Instructions"
+                       style="background-color: transparent; border: 0; padding: 0; font-size:20px;" /></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 instructions_class" id="instructions_id" style="display:none">
+            Enter any US optionable stock symbol.  Once the position has been retrieved any field in
+            <span style="color:red">red</span> can be edited.The stock price can be set to tick at
+            random by setting the radio button to use random ticks.  If random ticks is selected the position
+            will automatically update with every stock tick.  If use static is selected you will have to press
+            the calc greeks button to get the position to update.  You can change the vols by adjusting Spot vol,
+            Skew, and Smile.  Once you have changed the vol you must hit update vols for the new vols to be
+            applied.  Hide dividends does what it sounds like.  Show limited strikes removes any strike where the call
+            delta is over .75 or less than .25, it is helpful to limit the strike to the more important ones.
+            The checkboxes next to the expirations place/remove those strikes from the view.  You can input the
+            number of options in the position column, and input the number of shares of stock in the column next
+            total stock.  Finally to save the position to the DB hit the save position button.  If you are logged
+            in your position will be saved to your personal position.  If you are not logged in a the position will
+            be saved to a guest position and can be edited by anyone.  There is a sample position in GOOG that
+            you can look at, or create one on any stock you wish.  One caveat the model does not price dividend
+            pay stocks correctly, you can still view them but the pricing is incorrect.
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-bordered table-striped" style="max-width: 300px;">
+                <tr>
+                    <td><label>Symbol:</label></td>
+                    <td><input class="stock-table-cell" type="text" name="stock_symbol" id="stock_symbol_id"
+                               value ="{{stock_symbol}}" style="color : red"></td>
+                </tr>
+                <tr>
+                    <td><label>Last:</label></td>
+                    <td><input class="stock-table-cell" type="text" name="stock_price" id="stock_price_id"
+                               value ="{{stock_price}}" autocomplete="off" style="color : red" onblur="place_greeks()"/></td>
+                </tr>
+                <tr>
+                    <td><label>Interest Rate:</label></td>
+                    <td><input class="stock-table-cell" type="text" name="interest_rate" id="interest_rate_id"
+                               value ="{{interest_rate}}" autocomplete="off" style="color:red" /></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-md-8">
+            <div class="row">
+                <input class="btn btn-primary" type="submit" name="symbol_submit" id="symbol_submit_id" value="Get Stock">
+                <input class="btn btn-primary" type="submit" name="save_submit" id="save_submit_id" value="Save Position">
+            </div>
+            <div class="row">
+                <input type="radio" name="stock_driver" id="use_static"
+                       checked onclick="check_use_random_ticks()" />Use static stock price
+                <input type="radio" name="stock_driver" id="use_random_ticks"
+                       onclick="check_use_random_ticks()" />Use random ticks to drive stock price
+            </div>
+            <div class="row">
+                <input type="checkbox" id="show_dividends" onclick="check_show_dividends()"  />Hide dividends
+                <input type="checkbox" id="show_limited_strikes"
+                       onclick="check_show_strike()" checked />Show Limited Strikes (Show strikes between 25 and 75 delta)
+            </div>
+            <div class="row">
+                <input class="btn btn-default" type="button" value="upate vols" onclick="make_vol_skew()">
+                <input class="btn btn-default" type="button" value="calc greeks" onclick="place_greeks();calc_position_greeks()">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <label>Position Totals</label>
+    </div>
+    <div class="row">
+        <div class col-md-12>
+            <table class="table table-bordered table-striped position-totals">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Expiration</th>
+                        <th>Spot Vol</th>
+                        <th>Skew</th>
+                        <th>Smile</th>
+                        <th>Vega</th>
+                        <th>Delta</th>
+                        <th>Gamma</th>
+                        <th>Theta</th>
+                    </tr>
+                </thead>
+
+            {% if ordered_expiration_string %}
+            {% for i in range(ordered_expiration_string|length) %}
+                {% set exp = ordered_expiration_string[i] %}
+                <tr>
+                    <td><input type="checkbox" class="greeks5" id="{{exp}}_checkbox" checked onclick="check_show_strike()" /></td>
+                    <td><input class="table-cell" type="text" id="{{exp}}" value ="{{exp}}" readonly="readonly" /></td>
+                    <td><input class="table-cell" type="text" name="spot_vol_{{exp}}" id="spot_vol_{{exp}}" value ="{{vols[ordered_expiration_datetime[i]][0]}}" style="color : red" /></td>
+                    <td><input class="table-cell" type="text" name="slope_{{exp}}" id="slope_{{exp}}" value ="{{vols[ordered_expiration_datetime[i]][1]}}" style="color : red" /></td>
+                    <td><input class="table-cell" type="text" name="smile_{{exp}}" id="smile_{{exp}}" value ="{{vols[ordered_expiration_datetime[i]][2]}}" style="color : red" /></td>
+                    <td><input class="table-cell" type="text" id="vega_{{exp}}" value ="" readonly="readonly" /></td>
+                    <td><input class="table-cell" type="text" id="delta_{{exp}}" value ="" readonly="readonly" /></td>
+                    <td><input class="table-cell" type="text" id="gamma_{{exp}}" value ="" readonly="readonly" /></td>
+                    <td><input class="table-cell" type="text" id="theta_{{exp}}" value ="" readonly="readonly" /></td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+
+
+            <tr>
+                <td></td>
+                <td>Total</td>
+                <td>Stock</td>
+                {% if position %}
+                    <td><input class="table-cell" type="text" id="stock_position" name="stock_position" value ="{{position['stock']}}" style="color:red" /></td>
+                {% else %}
+                    <td><input class="table-cell" type="text" id="stock_position" name="stock_position" value ="" /></td>
+                {% endif %}
+                <td><input class="table-cell" type="text" name="smile_total" value ="" readonly="readonly" /></td>
+                {% if position_totals %}
+                    <td><input class="table-cell" type="text" id="vega_total" name="vega_total" value ="" readonly="readonly" /></td>
+                    <td><input class="table-cell" type="text" id="delta_total" name="delta_total" value ="" readonly="readonly" /></td>
+                    <td><input class="table-cell" type="text" id="gamma_total" name="gamma_total" value ="" readonly="readonly" /></td>
+                    <td><input class="table-cell" type="text" id="theta_total" name="theta_total" value ="" readonly="readonly" /></td>
+                {% else %}
+                    <td><input class="table-cell" type="text" id="vega_total" name="vega_total" value ="" readonly="readonly" /></td>
+                    <td><input class="table-cell" type="text" id="delta_total" name="delta_total" value ="" readonly="readonly" /></td>
+                    <td><input class="table-cell" type="text" id="gamma_total" name="gamma_total" value ="" readonly="readonly" /></td>
+                    <td><input class="table-cell" type="text" id="theta_total" name="theta_total" value ="" readonly="readonly" /></td>
+                {% endif %}
+            </tr>
+
+            </table>
+        </div>
+    </div>
+
+    {% if ordered_expiration_string %}{% if projected_dividends %}
+        <div class="row">
+            <label>Dividends</label>
+        </div>
+        <div class="row">
+            <div class col-md-12>
+                <table class="table table-bordered table-striped position-totals dividend-table"
+                       id="dividend-table" style="display:none">
+                    <tr>
+                        {% for div in projected_dividends %}
+                            <td>{{div[0]}}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for div in projected_dividends %}
+                            <td>{{div[1]}}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </div>
+        </div>
+    {% endif %}{% endif %}
+
+    <div class="row">
+        <label>Option Position</label>
+    </div>
+
+    <div class="row">
+        <table class="table table-bordered table-striped option_chain_table">
+            <thead>
+                <tr>
+                    <th>Expiry</th>
+                    <th>Strike</th>
+                    <th>Value</th>
+                    <th>Delta</th>
+                    <th>Vega</th>
+                    <th>Gamma</th>
+                    <th>Theta</th>
+                    <th>Open</th>
+                    <th>Pos</th>
+                    <th>Vol</th>
+                    <th>Pos</th>
+                    <th>Value</th>
+                    <th>Delta</th>
+                    <th>Vega</th>
+                    <th>Gamma</th>
+                    <th>Theta</th>
+                    <th>Open</th>
+                </tr>
+            </thead>
+            {% if ordered_expiration_string %}{% if ordered_expiration_datetime %}
+            {% for i in range(ordered_expiration_datetime|length) %}{%set exp = ordered_expiration_datetime[i] %}
+            {% set exp_str = ordered_expiration_string[i] %}
+                {% for option in ordered_option_symbol_list %}
+                    {% if option_chain[option]['exp_datetime.date'] == exp %}
+                        <tr id="{{option}}_row">
+                            <td class="option-table"><input type="text" class="option-table expiry-col" id="{{option}}_expiration" value ="{{exp_str}}" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_strike" value ="{{option_chain[option]['strike_price_str']}}" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_call_value" value ="" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_call_delta" value ="" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_call_vega" value ="" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_call_gamma" value ="" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_call_theta" value ="" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_call_open_interest" value ="{{option_chain[option]['open_interest']}}" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" name="{{option}}_call_position" id="{{option}}_call_position" value ="{{position[option]}}" style="color : red" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_vol" value ="" /></td>
+                            {% set option = option[:-9] + 'P' + option[-8:] %}
+                            <td class="option-table"><input type="text" class="option-table" name="{{option}}_put_position" id="{{option}}_put_position" value ="{{position[option]}}" style="color : red" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_put_value" value ="" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_put_delta" value ="" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_put_vega" value ="" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_put_gamma" value ="" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_put_theta" value ="" readonly="readonly" /></td>
+                            <td class="option-table"><input type="text" class="option-table" id="{{option}}_put_open_interest" value ="{{option_chain[option]['open_interest']}}" readonly="readonly" /></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                {% endfor %}
+            {% endif %}
+            {% endif %}
+        </table>
+    </div>
+</div>
+
+
+<input type="hidden" name="stock_symbol_hidden" value="{{stock_symbol}}" />
+<input type="hidden" name="option_chain_hidden" value="{{json_option_chain}}" />
+<input type="hidden" name="projected_dividends_hidden" value="{{json_projected_dividends}}" />
+<input type="hidden" name="vols_by_month_hidden" value="{{json_vols}}" />
+<input type="hidden" name="stock_price_hidden" value="{{stock_price}}" />
+<input type="hidden" name="trades_on_hidden" value="{{json_trades_on}}" />
+<input type="hidden" name="ordered_expiration_string_hidden" value="{{json_ordered_expiration_string}}" />
+
+{% if option_chain %}
+<script charset="utf-8">
+    var option_chain = {{json_option_chain|safe}};
+    var trades_on = {{json_trades_on|safe}};
+    var vols_by_month = {{json_vols|safe}};
+    var projected_dividends = {{json_projected_dividends|safe}};
+    var spot = parseFloat(document.getElementById('stock_price_id').value);
+    var greek_dictionary = {};
+
+    //var ordered_option_symbol_list = {{ordered_option_symbol_list|safe}};
+
+    //create the ordered_option_symbol_list using option_chain
+    var ordered_option_symbol_list = []
+    for (option in option_chain){
+        if (option.slice(-9,-8) == 'C'){
+            ordered_option_symbol_list.push(option)
+        }
+    }
+    ordered_option_symbol_list.sort()
+
+    //create the blank greek dictionary
+    for (option in option_chain){
+        greek_dictionary[option] = {};
+    }
+</script>
+{% endif %}
+
+</form>
+{% endblock %}
+
+
+
+
+
+
+
+
+

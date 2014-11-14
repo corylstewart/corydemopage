@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style type="text/css">
+    .error_class
+    {
+        color: red;
+    }
+
+</style>
+
+<script>
+    $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+        var target_id = event.currentTarget.attributes[0].value
+        setDropDownValueByID(target_id, $( event.currentTarget ).text().trim())
+        return false;
+    });
+
+    function clear_form() {
+        document.getElementById('piece_title').value = '';
+        document.getElementById('piece_artist').value = '';
+        document.getElementById('piece_purchase_price').value = '';
+        document.getElementById('piece_value').value = '';
+        document.getElementById('piece_app').value = '';
+        document.getElementById('piece_description').value = '';
+        document.getElementById("file_to_upload").value= '';
+        setDropDownValueByID("location_selection", 'None');
+        setDropDownValueByID("medium_selection", 'None');
+        setDropDownValueByID("app_selection", 'Estimated')
+    };
+
+    function setDropDownValueByID(target_id, new_text) {
+        var $target = $('#'+target_id);
+        $target.closest( '.btn-group' )
+            .find( '[data-bind="label"]' ).text( new_text+' ' )
+            .end()
+            .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+        updateHidden(target_id, new_text);
+        return false;
+    };
+
+    function updateHidden(parentId, new_text) {
+        $('#' + parentId + '_hidden').val(new_text);
+    }
+
+
+
+</script>
+
+<div class="container-fluid">
+    <form method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6 form_group">
+            <div class="container-fluid">
+                <div class="row">
+                    <label for="piece_title">Title</label>
+                    <input type="text" class="form-control" required="" name="piece_title" id="piece_title"
+                           autocomplete="off" placeholder="Title" value="{{piece_title}}">
+                </div>
+
+                <div class="row">
+                    <label for="piece_artist">Artist</label>
+                    <input type="text" class="form-control" name="piece_artist" id="piece_artist"
+                           autocomplete="off" placeholder="Artist" value="{{piece_artist}}">
+                </div>
+
+                <div class="row">
+                    <label for="select_location">Location</label>
+                    <div class="btn-group btn-input clearfix">
+                      <button type="button" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown"
+                              name="piece_location" id="location_selection">
+                        <span data-bind="label">
+                            {% if piece_location %}
+                                {{ piece_location }}
+                            {% else %}
+                                None
+                            {% endif %}
+                        </span><span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                          {% for location in locations %}
+                            <li role="location_selection">
+                                <a role="menuitem" tabindex="-1" href="#">{{ location }}</a>
+                            </li>
+                          {% endfor %}
+                      </ul>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="select_medium">Medium</label>
+                    <div class="btn-group btn-input clearfix">
+                      <button type="button" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown"
+                              name="piece_medium" id="medium_selection">
+                        <span data-bind="label">
+                            {% if piece_medium %}
+                                {{ piece_medium }}
+                            {% else %}
+                                None
+                            {% endif %}
+                        </span><span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                          {% for medium in mediums %}
+                            <li role="medium_selection">
+                                <a role="menuitem" tabindex="-1" href="#">{{ medium }}</a>
+                            </li>
+                          {% endfor %}
+                      </ul>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="piece_value">Value</label>
+                    <input type="text" class="form-control" name="piece_value" id="piece_value"
+                           autocomplete="off" placeholder="Value" value="{{piece_value}}">
+                </div>
+
+                <div class="row">
+                    <div class="btn-group btn-input clearfix">
+                      <button type="button" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown"
+                              name="piece_value_app" id="app_selection">
+                        <span data-bind="label">
+                            {% if piece_value_app %}
+                                {{ piece_value_app }}
+                            {% else %}
+                                Estimated
+                            {% endif %}
+                        </span><span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                          {% for app in valuation_type %}
+                            <li role="app_selection">
+                                <a role="menuitem" tabindex="-1" href="#">{{ app }}</a>
+                            </li>
+                          {% endfor %}
+                      </ul>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="piece_purchase_price">Purchase Price</label>
+                    <input type="text" class="form-control" name="piece_purchase_price" id="piece_purchase_price"
+                           autocomplete="off" placeholder="Purchase Price" value="{{piece_purchase_price}}">
+                </div>
+
+                <div class="row">
+                    <label for="piece_app">Appraised By</label>
+                    <input type="text" class="form-control" name="piece_app" id="piece_app"
+                           autocomplete="off" placeholder="Appraised By" value="{{piece_app}}">
+                </div>
+
+                <div class="row">
+                    <label for="piece_app">Photo</label>
+                    <span class="btn btn-default">
+                        <input type="file" {% if not work %}required="" {% endif %}name="file_to_upload" id="file_to_upload">
+                    </span>
+                </div>
+
+                <div class="row">
+                    <label for="piece_description">Other Information</label>
+                    <textarea class="form-control" name="piece_description" id="piece_description"
+                           autocomplete="off"  rows="5">{{piece_description}}</textarea>
+                </div>
+
+                <div class="row">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-warning" onclick="clear_form()">Clear</button>
+                </div>
+
+                <input type="hidden" name="location_selection_hidden" id="location_selection_hidden"
+                       value="{% if piece_location %}{{ piece_location }}{% else %}None{% endif %}">
+                <input type="hidden" name="medium_selection_hidden" id="medium_selection_hidden"
+                       value="{% if piece_medium %}{{ piece_medium }}{% else %}None{% endif %}">
+                <input type="hidden" name="app_selection_hidden" id="app_selection_hidden"
+                       value="{% if piece_value_app %}{{ piece_value_app }}{% else %}Estimated{% endif %}">
+            </div>
+        </div>
+
+        <div class="col-md-6">
+        {% if work %}
+            <img src="/scaled/{{work.key.id()}}" class="img-responsive" />
+            <input value="{{work.key.id()}}" name="hidden_key" hidden="hidden" />
+        {% else %}
+        {% endif %}
+        </div>
+    </div>
+
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<link type="text/css" rel="stylesheet" href="/static/sudoku.css" />
+<script type="text/javascript" src="/static/sudoku.js"></script>
+<script lang="JavaScript">
+    var puzzle_solution = '{{puzzle_solution}}'
+    var puzzle = '{{puzzle}}'
+    var puzzle_level = '{{level}}'
+</script>
+
+<div class="container-fluid text-center">
+    <div class="row">
+        {% if level != 'easy' %}<a href="/sudoku?level=easy">Easy</a>{% else %}Easy{% endif %}
+        {% if level != 'medium' %}<a href="/sudoku?level=medium">Medium</a>{% else %}Medium{% endif %}
+        {% if level != 'hard' %}<a href="/sudoku?level=hard">Hard</a>{% else %}Hard{% endif %}
+        {% if level != 'user' %}<a href="/sudoku?level=user">User Generated</a>{% else %}User Generated{% endif %}
+    </div>
+
+    <div class="row h3">
+        <b><span id="progress_message">
+            {%if level == 'user' %}
+                {% if user_solved == 'true' %}
+                    Here is the solution to your puzzle.
+                {% elif user_solved == 'not solved' %}
+                    That puzzle was too tough for me. This is as far as I got.
+                {% elif user_solved == 'not valid' %}
+                    That was not a valid puzzle.
+                {% else %}
+                    Please enter you puzzle below.
+                {% endif %}
+            {% else %}
+                Here is the puzzle. Good luck.
+            {% endif %}
+        </span></b>
+    </div>
+
+    <div class="row">
+        <table class="table table-bordered table-responsove">
+            {% for row in cell_html %}
+                <tr>
+                    {% for cell in row %}
+                        <td class="{{cell.td_class}}" {{cell.td_name}} {{cell.td_id}}>
+                            <input class="{{cell.in_class}}" size="2" autocomplete="off" {{cell.in_type}} {{cell.in_name}} {{cell.in_id}}>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="row">
+        {% if level != 'user' %}
+            <input class="btn btn-primary btn-sm" name="check_btn" type="button" value="Check Progress" onclick="check_progress()" />
+            <input class="btn btn-primary btn-sm" name="'show_error_btn" type="button" value="Show Errors" onclick="show_errors()" />
+            <input class="btn btn-primary btn-sm" name="clear_btn" type="button" value="Clear Board" onclick="clear_board()" />
+            <input class="btn btn-primary btn-sm" name="new_puzzle_btn" type="button" value="New Puzzle" onclick="get_new_puzzle()" />
+            <input class="btn btn-primary btn-sm" name="show_solution_btn" type="button" value="Show Solution" onclick="show_solution()" />
+        {% else %}
+            <input class="btn btn-primary btn-sm" name="solve_btn" type="button" value="Solve Puzzle" onclick="solve_puzzle()" />
+            <input class="btn btn-primary btn-sm" name="clear_btn" type="button" value="Clear Board" onclick="clear_blank_board()"/>
+            <input class="btn btn-primary btn-sm" name="puzzle_string_btn" type="button" value="Enter Puzzle as String" onclick="enter_puzzle_as_string()" />
+        {% endif %}
+    </div>
+</div>
+
+<form method="post" id="user_puzzle_form">
+    <input name="user_puzzle_input_name" id="user_puzzle_input_id" type=hidden value="">
+</form>
+
+{% endblock %}

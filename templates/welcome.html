@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>
+    Welcome to my demo site.  The old site is still up and running and are located
+    <a href=http://coryoptionpage.appspot.com>here</a>.  Those pages were built before I started to try to learn
+    JavaScript.  While they were good practice on building more of the back end, they only served up static
+    web-pages.  So here are my attempts to bring the pages a little more life.
+</p>
+<p>
+    So now I have taken to converting the pages to bootstrap.  Currently the art pages are working.  Sudoku is
+    is now working.  The Option page looks better.  However the pricer seems to be broken need to fix that.
+    And I still need to update my resume.
+</p>
+
+<h1>Option Model</h1>
+<ol>
+    <li><h3>Purpose</h3></li>
+    <ul>
+        <li>Build a web-app that can be used to accurately model an equity option position and all of its greeks.</li>
+    </ul>
+    <li><h3>Goals</h3></li>
+    <ul>
+        <li>Create a streaming web-app that uses a range of cached values to create a real time option position.</li>
+        <li>Use a database to store users positions.</li>
+        <li>Provide analytics to show how a position/book would perform in different market conditions.</li>
+    </ul>
+    <li><h3>Features so far</h3></li>
+    <ul>
+        <li>Database containing all of a users positions.  If the user is not logged in they will have access to the guest account.</li>
+        <li>Although I would like to use real time/delayed market data I feel that it would be a violation of user agreements.
+            So I give the user the most current stock price.  From there the user can change the price by hand or use a very
+            simple random stock move generator to see the positions move in "real time".
+        </li>
+        <li>The model that I am using is a very simple Black Scholes implementation.  This has many drawbacks the most important
+            of which is that you cannot model dividend paying stocks accurately.  Until I come up with a JavaScript model for
+            something better that is going to be a huge limitation.
+        </li>
+    </ul>  
+    <li><h3>Future improvements</h3></li>
+    <ul>
+        <li>
+            I would like to show P&L graphs for single stocks in a variety of market scenarios.
+        </li>
+        <li>
+            Also, I would like to add an overall book view providing the user all of the greeks from all of the positions in real time.
+        </li>
+        <li>
+            In addition to a book view, I would like to add P&L graphs for the overall book in different market conditions.
+        </li>
+        <li>I have had to limit the size of the tree substantially both to limit instance use and reduce the timeouts.</li>
+        <li>Streaming does not seem like a reasonable option due to the limitations of the system at this time.</li>
+        <li>Add a page for viewing and setting skew versus the implied volatility</li>
+        <li>Find a library or come up with my own implementation of an option pricing model.  At this time that is well out of
+            the scope of my own ideas of what this project is about as well as above my mathematics background.
+        </li>
+    </ul>
+</ol>
+
+<h1>Sudoku</h1>
+<ol>
+    <li><h3>Purpose</h3></li>
+    <ul>
+        <li>Create a program that can create and solve valid puzzles of varying degrees of difficulty.</li>
+    </ul>
+    <li><h3>Goals</h3></li>
+    <ul>
+        <li>
+            Create algorithms that can solve increasingly harder puzzles and never have to use brute force to solve
+            a valid grid that does not require guessing to solve the problem.
+        </li>
+        <li>Create an algorithm that can create valid Sudoku grids of different difficulties.</li>
+    </ul>
+    <li><h3>Features</h3></li>
+    <ul>
+        <li>Ability to solve user generated grids and add them to database of grids.</li>
+        <li>Multiple levels of difficulty based on what techniques are required to solve the puzzle.  Using rules 
+            such as simple number elimination, pair and triplets, hidden pairs and triplets
+        </li>
+        
+    </ul>
+    <li><h3>Limitations</h3></li>
+    <ul>
+        <li>Although while using brute force in addition to my algorithms the program will find a solution.  It 
+            won't notice if a grid has more than one solution.
+        </li>
+        <li>I would like to add a few more layers of algorithms so that brute force is less used.</li>
+        <li></li>
+    </ul>
+    <li><h3>Future Improvements</h3></li>
+    <ul>
+        <li>Track what puzzles the user has tried and record the times they finished the puzzle in.</li>
+        <li>My old version can generate grids, but I have not implemented that in this version yet.</li>
+        <li>Figure out a better way to generate more difficult grids.</li>
+       
+    </ul>   
+</ol>
+
+<h1>Art Collection</h1>
+<ol>
+    <li><h3>Purpose</h3></li>
+    <ul>
+        <li>Create a easy way for my father-in-law to track his art collection.</li>
+        <li>This project is still a work in progress changes are being made daily.</li>
+    </ul>
+    <li><h3>Goals</h3></li>
+    <ul>
+        <li>Have simple form for entering information about artwork.</li>
+        <li>Have a simple way to view the collection using different queries.</li>
+        <li>Be able to create reports for export to Excell or MS Access.</li>
+        <li>Send emails to my brother-in-law so that he can track progress.</li>
+    </ul>
+    <li><h3>Features</h3></li>
+    <ul>
+        <li>I have built the database and the forms for entering information.</li>
+        <li>
+            Viewing gallery is now searchable by location and medium.  Sorting is
+            available on a number of indexes.
+        </li>
+        <li>
+            Personal galleries are only viewable while logged in.  When logged in
+            as a guest you see the guest gallery.
+        </li>
+        <li>
+            Art work information is now editable.  From the viewing gallery
+            click on an image to get to the edit page.
+        </li>
+        <li>Able to resize images so that the file size fits within a BlobProperty.</li>
+        <li>Seems like I am catching the errors if no file is selected.</li>
+        <li>
+            I have set up an email notification system.  I receive alerts when a user
+            sets up an account, and adds photos.  I will set it up so that my
+            brother-in-law will gets reports when my father-in-law adds a new piece to
+            his collection.
+        </li>
+        <li>
+            Reports can be generated and uploaded to a Google Drive account. The photos
+            are stored as individual documents, and there is a master spreadsheet
+            containing all of the information about the art.
+        </li>
+    </ul>
+    <li><h3>Future Improvements</h3></li>
+    <ul>
+        <li>Figure out what fields are necessary and which are not.</li>
+        <li>
+            Need to fix the spreadsheet generator so that it does a batch change
+            rather then inserting each row.
+        </li>
+        <li>Would like to set up a task queue for generating the reports.</li>
+        <li>Would like the viewing gallery to look a little nicer.  Playing
+            with the layout would be nice.  But want to nail down the fields
+            before I attempt that.
+        </li>
+        <li>
+            Would be nice to set up the gallery view so that I only
+            hit the DB once, and handle all of the sorting and filtering
+            with javascript.
+        </li>
+    </ul>
+</ol>
+
+<h1>Other Projects and Goals</h1>
+<ol>
+    <li><h3>Helpful Reminders</h3></li>
+    <ul>
+        <li>Create a website that users can set up reminders of chores that are maintenance related.</li>
+        <li>Users could input a variety of items that they need reminders for.  And the site would e-mail
+            reminders for the user to do them.
+        </li>
+        <li>Examples of the task are to change the oil in their car, the filter in the furnace, or call
+            someone on their birthday.</li>
+        <li>Once the reminder is set the user can log in and set the task to done once it is finished.</li>
+        <li>A possible way to monetize it would be to offer coupons and advertising with the reminders
+            for what ever the task is.
+        </li>
+        <li>A pie in the sky idea would be to have the user put in actual model numbers on items, such as
+            car, appliances.  Using those model numbers come up with actual maintenance scheduling based on
+            user manuals.
+        </li>
+        </ul>
+    <li><h3>CSS and JavaScript</h3></li>
+    <ul>
+        <li>Practice, practice, practice.</li>
+    </ul>
+</ol>
+
+{% endblock %}

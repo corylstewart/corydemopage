@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script>
+    $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+        var target_id = event.currentTarget.attributes[0].value
+        setDropDownValueByID(target_id, $( event.currentTarget ).text().trim())
+        return false;
+    });
+
+    function setDropDownValueByID(target_id, new_text) {
+        var $target = $('#'+target_id);
+        $target.closest( '.btn-group' )
+            .find( '[data-bind="label"]' ).text( new_text+' ' )
+            .end()
+            .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+        updateHidden(target_id, new_text);
+        return false;
+    };
+
+    function updateHidden(parentId, new_text) {
+        $('#' + parentId + '_hidden').val(new_text);
+    }
+
+</script>
+
+<form method="post">
+    <div class="container-fluid">
+
+        <div class="row">
+            <label for="select_location">Location</label>
+            <div class="btn-group btn-input clearfix" style="width: 120px">
+              <button type="button" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown"
+                      name="piece_location" id="location_selection">
+                <span data-bind="label">
+                    {% if piece_location %}
+                        {{ piece_location }}
+                    {% else %}
+                        All
+                    {% endif %}
+                </span><span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                    <li role="location_selection">
+                        <a role="menuitem" tabindex="-1" href="#">All</a>
+                    </li>
+                  {% for location in locations %}
+                    <li role="location_selection">
+                        <a role="menuitem" tabindex="-1" href="#">{{ location }}</a>
+                    </li>
+                  {% endfor %}
+              </ul>
+            </div>
+
+            <label for="select_medium">Medium</label>
+            <div class="btn-group btn-input clearfix" style="width: 120px">
+              <button type="button" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown"
+                      name="piece_medium" id="medium_selection">
+                <span data-bind="label">
+                    {% if piece_medium %}
+                        {{ piece_medium }}
+                    {% else %}
+                        All
+                    {% endif %}
+                </span><span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                  <li role="medium_selection">
+                    <a role="menuitem" tabindex="-1" href="#">All</a>
+                  </li>
+                  {% for medium in mediums %}
+                    <li role="medium_selection">
+                        <a role="menuitem" tabindex="-1" href="#">{{ medium }}</a>
+                    </li>
+                  {% endfor %}
+              </ul>
+            </div>
+
+            <label for="select_sort">Sort By</label>
+            <div class="btn-group btn-input clearfix" style="width: 150px">
+              <button type="button" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown"
+                      name="piece_sort" id="sort_selection">
+                <span data-bind="label">None </span><span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                  {% for sort_kind in sort_by %}
+                    <li role="sort_selection">
+                        <a role="menuitem" tabindex="-1" href="#">{{ sort_kind }}</a>
+                    </li>
+                  {% endfor %}
+              </ul>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Search</button>
+
+            <input type="hidden" name="location_selection_hidden" id="location_selection_hidden"
+                   value="{% if piece_location %}{{ piece_location }}{% else %}All{% endif %}">
+            <input type="hidden" name="medium_selection_hidden" id="medium_selection_hidden"
+                   value="{% if piece_medium %}{{ piece_medium }}{% else %}All{% endif %}">
+            <input type="hidden" name="sort_selection_hidden" id="sort_selection_hidden"
+                   value="{% if piece_sorting %}{{ piece_sorting }}{% else %}None{% endif %}">
+
+        </div>
+
+        {% for i in range((art_works|length / 3)|round(0,'floor')|int  +1) %}
+            <div class="row">
+                {% for j in range(3) %}
+                    {% if art_works|length >= (i*3)+j+1 %}
+                        <div class="col-md-4 photo_box">
+                            <div class="row">
+                                <div class="col-md-5">
+                                  <a href="/edit/{{art_works[(i*3)+j].key.id()}}">
+                                    <img src="/thumb/{{art_works[(i*3)+j].key.id()}}" class="img-responsive" />
+                                  </a>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="row"><label>Title: </label>{{art_works[(i*3)+j].title}}</div>
+                                    <div class="row"><label>Artist: </label>{{art_works[(i*3)+j].artist}}</div>
+                                    <div class="row"><label>Location: </label>{{art_works[(i*3)+j].location}}</div>
+                                    <div class="row"><label>Value: </label>{{art_works[(i*3)+j].value}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</form>
+
+{% endblock %}

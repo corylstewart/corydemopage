@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if error_msg %}
+    {% set user_text_placeholder = error_msg %}
+{% else %}
+    {% set user_text_placeholder = "Username" %}
+{% endif %}
+
+<form method="post" class="form-signin login-signin" role="form">
+    <h2 class="form-signin-heading">Please sign in</h2>
+    <input type="text" class="form-control" placeholder="{{user_text_placeholder}}" required=""
+            id="user_name_login_id" name="user_name_login_name">
+    <input type="password" class="form-control" placeholder="Password" required=""
+            id="password_login_id" name="password_login_name">
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+</form>
+
+{% endblock %}

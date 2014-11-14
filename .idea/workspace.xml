@@ -76,11 +76,9 @@
       <file leaf-file-name="resume.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/resume.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.26215896" vertical-offset="0" max-vertical-offset="843">
-              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-              <folding>
-                <element signature="e#214#277#0#HTML" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.16132858" vertical-offset="0" max-vertical-offset="843">
+              <caret line="8" column="51" selection-start-line="8" selection-start-column="51" selection-end-line="8" selection-end-column="51" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -711,11 +709,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/resume.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.26215896" vertical-offset="0" max-vertical-offset="843">
-          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-          <folding>
-            <element signature="e#214#277#0#HTML" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.16132858" vertical-offset="0" max-vertical-offset="843">
+          <caret line="8" column="51" selection-start-line="8" selection-start-column="51" selection-end-line="8" selection-end-column="51" />
+          <folding />
         </state>
       </provider>
     </entry>

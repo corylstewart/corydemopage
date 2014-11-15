@@ -117,6 +117,8 @@ td, th, tr {
 .dividend-table {
     width:100%;
     overflow-x: auto;
+    table-layout: fixed;
+    word-wrap: break-word;
 }
 
 .option-table {
@@ -127,6 +129,8 @@ td, th, tr {
     font-size: 10px;
     padding: 0px;
     max-width: 50px;
+    table-layout: fixed;
+    word-wrap: break-word;
 }
 
 .expiry-col {

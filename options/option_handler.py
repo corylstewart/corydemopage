@@ -1,10 +1,10 @@
 from EnhancedHandler import EnhancedHandler as EH
 import position_retriever as PR
 import option_db as ODB
-import time
 import json
 import copy
 import datetime
+
 
 class MakeArgDictPosition:
     def __init__(self, arg_dict, position):
@@ -39,6 +39,7 @@ class MakeArgDictPosition:
         arg_dict['json_ordered_option_symbol_list'] = json.dumps(position.option_chain.ordered_option_symbol_list)
         arg_dict['json_ordered_expiration_string'] = json.dumps(position.option_chain.ordered_expirations_string)
 
+
 class SavePosition:
     def __init__(self, page):
         self.stock_price = None
@@ -53,8 +54,6 @@ class SavePosition:
         self.ordered_expiration_datetime = None
         self.ordered_option_symbol_list = None
         self.ordered_expiration_string = None
-
-
 
         stock_symbol_hidden = page.request.get('stock_symbol_hidden')
         if not stock_symbol_hidden:
@@ -77,16 +76,14 @@ class SavePosition:
             self.get_json_object_from_page(page)
             self.make_non_json_objects(page)
             self.make_option_symbol_list(page)
-            self.get_postion_from_page(page)
+            self.get_position_from_page(page)
             self.get_vols_from_page(page)
 
             db = ODB.Positions()
             db.save_position(page.user, self.stock_symbol, self.position, self.vols, self.rate)
 
-
-        #page.render('option-chain.html', **page.arg_dict)
-
-    def get_json_object_from_page(self,page):
+    @staticmethod
+    def get_json_object_from_page(page):
         #create copies of the json objects
         page.arg_dict['json_option_chain'] = page.request.get('option_chain_hidden')
         page.arg_dict['json_projected_dividends'] = page.request.get('projected_dividends_hidden')
@@ -108,7 +105,7 @@ class SavePosition:
         page.arg_dict['ordered_expiration_string'] = self.ordered_expiration_string
         page.arg_dict['ordered_expiration_datetime'] = self.make_ordered_expiration_datetime(page)
 
-    def get_postion_from_page(self,page):
+    def get_position_from_page(self,page):
         self.position = {}
         for option in self.option_chain:
             if option[-9] == 'C':
@@ -192,27 +189,22 @@ class SavePosition:
         page.arg_dict['json_vols'] = json.dumps(jvols)
 
 
-
-class GetNewStock:
-    def __init__(self, page):
-        pass
-
 class OptionPageHandler(EH.EnhancedHandler):
     def get(self):
         self.render('option-chain.html', **self.arg_dict)
 
     def post(self):
-        self.symbol_submit_btn = self.request.get('symbol_submit')
-        self.save_position_btn = self.request.get('save_submit')
-        if self.save_position_btn:
+        symbol_submit_btn = self.request.get('symbol_submit')
+        save_position_btn = self.request.get('save_submit')
+        if save_position_btn:
             save_pos = SavePosition(self)
-        elif self.symbol_submit_btn:
-            self.stock_symbol = self.request.get('stock_symbol')
-            if self.stock_symbol == '':
+        elif symbol_submit_btn:
+            stock_symbol = self.request.get('stock_symbol')
+            if stock_symbol == '':
                 self.arg_dict['error'] = 'Please enter a stock symbol!'
             else:
-                self.arg_dict['stock_symbol'] = self.stock_symbol.upper()      
-                position = PR.PositionRetriever(self.user, self.stock_symbol)
+                self.arg_dict['stock_symbol'] = stock_symbol.upper()
+                position = PR.PositionRetriever(self.user, stock_symbol)
                 if not position.has_error:
                     MakeArgDictPosition(self.arg_dict, position)
                 else:

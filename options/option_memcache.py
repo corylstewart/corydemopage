@@ -1,6 +1,7 @@
 from google.appengine.api import memcache
 import occ_query as OCC
 
+
 class OptionsMemcache:
     def __init__(self, user, stock_symbol):
         self.user = user
@@ -25,7 +26,6 @@ class OptionsMemcache:
             self.past_dividends = self.get_user_type(self.past_dividends_type)
             self.option_chain = self.get_option_chain()
 
-
     def get_optionable_list(self):
         optionable = memcache.get(self.optionable_type)
         if not optionable:
@@ -34,14 +34,14 @@ class OptionsMemcache:
                 memcache.set(self.optionable_type, optionable, 25200)
         return optionable
 
-    def make_memcache_string(self,type):
-        return self.user + '_' + self.stock_symbol + '_' + type
+    def make_memcache_string(self, its_type):
+        return self.user + '_' + self.stock_symbol + '_' + its_type
 
-    def get_user_type(self, type):
-        return memcache.get(self.make_memcache_string(type))
+    def get_user_type(self, its_type):
+        return memcache.get(self.make_memcache_string(its_type))
 
-    def put_user_of_type(self, value, type):
-        memcache.set(self.make_memcache_string(type), value, 25200)
+    def put_user_of_type(self, value, its_type):
+        memcache.set(self.make_memcache_string(its_type), value, 25200)
 
     def get_option_chain(self):
         return memcache.get(self.option_chain_type)
@@ -52,5 +52,3 @@ class OptionsMemcache:
     def remove_user_position(self):
         for key, value in self.types.items():
             memcache.delete(self.make_memcache_string(value))
-
-

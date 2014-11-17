@@ -2,11 +2,12 @@ import urllib2
 import datetime
 import copy
 
+
 class OccOptionableList:
 
     def __init__(self):
         self.optionable_list = None
-        self.retieved = None
+        self.retrieved = None
         self._get_occ_listed_stocks()
 
     #query the occ for the list of optionable stocks
@@ -19,10 +20,11 @@ class OccOptionableList:
             for word in words:
                 optionable.append(word.split()[0])
             self.optionable_list = optionable
-            self.retieved = datetime.date.today()
+            self.retrieved = datetime.date.today()
         except:
             self.optionable_list = None
         return self.optionable_list
+
 
 class OccOptionChain:
     def __init__(self, stock_symbol):
@@ -105,7 +107,6 @@ class OccOptionChain:
                 self.option_chain[put_symbol] = copy.deepcopy(this_symbol)
                 self.option_chain[put_symbol]['CP'] = 'P'
                 self.option_chain[put_symbol]['open_interest'] = put_open
-
 
     #create a odered list of the options and return the list
     def _create_ordered_option_symbol_list(self):

@@ -127,3 +127,9 @@ table, td
 	color: red;
 }
 
+.topleft
+{
+	border-top: black solid 2px;
+	border-left: black solid 2px;
+}
+

@@ -9,6 +9,8 @@
     max-width: 330px;
 }
 
+/*body { background-image: url(http://www.missmaryk.com/nimbg3.gif); background-repeat: repeat; }*/
+
 #pac-input {
     background-color: #fff;
     padding: 0 11px 0 13px;
@@ -19,6 +21,12 @@
     font-weight: 300;
 }
 
-.photo_box {
+.photo-row {
+    border: solid black 1px;
+    margin-top: 10px;
+}
+
+.photo-box {
     padding: 15px;
+
 }

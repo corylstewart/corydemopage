@@ -33,6 +33,7 @@ class MainHandler(EH.EnhancedHandler):
     def get(self):
         self.render('welcome.html', **self.arg_dict)
 
+
 class ResumeHandler(EH.EnhancedHandler):
     def get(self):
         self.render('resume.html',  **self.arg_dict)

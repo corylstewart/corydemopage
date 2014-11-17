@@ -1,7 +1,7 @@
 import time
 import gdata.spreadsheet.service
 import gdata.docs.service
-import  gdata.docs.client
+import gdata.docs.client
 import gdata.docs.data
 from google.appengine.api import images
 from EnhancedHandler import EnhancedHandler as EH
@@ -17,7 +17,6 @@ class GqlToSpreadsheet(EH.EnhancedHandler):
         password = secret.password
         spreadsheet_key = '1LZ8UsfIPYR3f0ErlYtyJCG6RC8JfKymCWHH1s_0w5aU'
         worksheet_id = 'od6'
-
 
         pieces = ACDB.ArtWork().get_by_user(self.user)
 
@@ -41,7 +40,6 @@ class GqlToSpreadsheet(EH.EnhancedHandler):
         spr_client.password = password
         spr_client.source = 'Creating a spreadsheet for mailing'
         spr_client.ProgrammaticLogin()     
-
 
         for piece in pieces:
             #this section place files with a photo in the drive
@@ -69,8 +67,6 @@ class GqlToSpreadsheet(EH.EnhancedHandler):
                 except:
                     pass
 
-
-
         #this section deals with spreadsheet
         cells = spr_client.GetCellsFeed(spreadsheet_key, worksheet_id)
         batch_request = gdata.spreadsheet.SpreadsheetsCellsFeed()
@@ -82,7 +78,6 @@ class GqlToSpreadsheet(EH.EnhancedHandler):
         except:
             pass
 
-
         headers = {'title':1, 'location':2, 'value':3, 'photo':4}
         for header in headers:
             try:
@@ -91,9 +86,8 @@ class GqlToSpreadsheet(EH.EnhancedHandler):
             except:
                 pass
 
-
         for i, piece in enumerate(pieces):
-            dict = {}
+            dict = dict()
             dict['title'] = piece.title
             dict['location'] = piece.location
             dict['value'] = str(piece.value)

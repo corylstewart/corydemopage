@@ -102,11 +102,11 @@
 
         </div>
 
-        {% for i in range((art_works|length / 3)|round(0,'floor')|int  +1) %}
-            <div class="row">
+        {% for i in range((art_works|length / 3)|round(0,'floor')|int) %}
+            <div class="row photo-row">
                 {% for j in range(3) %}
                     {% if art_works|length >= (i*3)+j+1 %}
-                        <div class="col-md-4 photo_box">
+                        <div class="col-md-4 photo-box">
                             <div class="row">
                                 <div class="col-md-5">
                                   <a href="/edit/{{art_works[(i*3)+j].key.id()}}">

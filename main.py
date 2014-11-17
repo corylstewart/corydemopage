@@ -57,7 +57,7 @@ app = webapp2.WSGIApplication([
     ('/artcollection/collection', AC.CollectionHandler),
     ('/serve/([^/]+)?', AC.ImgHandler),
     ('/thumb/([^/]+)?', AC.ThumbHandler),
-    ('/scaled/([^/]+)?', AC.ScaledHandler),
+    ('/scaled/([^/]+)?', AC.ImgHandler),
     ('/edit/([^/]+)?', AC.PieceEditHandler),
     ('/artcollection/spreadsheet', ACS.GqlToSpreadsheet)
 

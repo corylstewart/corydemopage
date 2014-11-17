@@ -112,29 +112,32 @@
 
                 <div class="row">
                     <label for="piece_value">Value</label>
-                    <input type="text" class="form-control" name="piece_value" id="piece_value"
-                           autocomplete="off" placeholder="Value" value="{{piece_value}}">
-                </div>
-
-                <div class="row">
-                    <div class="btn-group btn-input clearfix">
-                      <button type="button" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown"
-                              name="piece_value_app" id="app_selection">
-                        <span data-bind="label">
-                            {% if piece_value_app %}
-                                {{ piece_value_app }}
-                            {% else %}
-                                Estimated
-                            {% endif %}
-                        </span><span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu" role="menu">
-                          {% for app in valuation_type %}
-                            <li role="app_selection">
-                                <a role="menuitem" tabindex="-1" href="#">{{ app }}</a>
-                            </li>
-                          {% endfor %}
-                      </ul>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="piece_value" id="piece_value"
+                                   autocomplete="off" placeholder="Value" value="{{piece_value}}">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="btn-group btn-input clearfix">
+                              <button type="button" class="btn btn-default dropdown-toggle form-control"
+                                      data-toggle="dropdown" name="piece_value_app" id="app_selection">
+                                <span data-bind="label">
+                                    {% if piece_value_app %}
+                                        {{ piece_value_app }}
+                                    {% else %}
+                                        Estimated
+                                    {% endif %}
+                                </span><span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu" role="menu">
+                                  {% for app in valuation_type %}
+                                    <li role="app_selection">
+                                        <a role="menuitem" tabindex="-1" href="#">{{ app }}</a>
+                                    </li>
+                                  {% endfor %}
+                              </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -164,7 +167,7 @@
                 </div>
 
                 <div class="row">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary" name="submit">Save</button>
                     <button type="button" class="btn btn-warning" onclick="clear_form()">Clear</button>
                 </div>
 

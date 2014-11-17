@@ -15,16 +15,11 @@
 # limitations under the License.
 #
 import webapp2
-import sys
-import jinja2
-import re
-import os
 
 from EnhancedHandler import EnhancedHandler as EH
 from sudoku import sudoku_handler as SH
 from users import user_handler as UH
 from options import option_handler as OH
-from options import option_memcache as OM
 from art_collection import art_collection_handler as AC
 from art_collection import gql_to_spreadsheet as ACS
 

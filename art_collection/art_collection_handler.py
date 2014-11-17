@@ -109,7 +109,7 @@ class PieceEditHandler(EH.EnhancedHandler):
     def get(self, resource):
         resource = int(urllib.unquote(resource))
         art = ACDB.ArtWork().get_by_id(resource)
-        if self.user <> art.user:
+        if self.user != art.user:
             self.write("Users do not match")
             return
         self.arg_dict['work'] = art
@@ -132,11 +132,11 @@ class PieceEditHandler(EH.EnhancedHandler):
     def post(self, resource):
         resource = int(urllib.unquote(resource))
         hidden_resource = int(self.request.get('hidden_key'))
-        if resource <> hidden_resource:
+        if resource != hidden_resource:
             self.write("Keys don't match.")
             return
         art = ACDB.ArtWork().get_by_id(resource)
-        if art.user <> self.user:
+        if art.user != self.user:
             self.write("Users do not match")
             return
         art.title = self.request.get('piece_title')
@@ -149,13 +149,11 @@ class PieceEditHandler(EH.EnhancedHandler):
         art.appraised_by = self.request.get('piece_app')
         art.description = self.request.get('piece_description')
         upload_files = self.request.POST['file_to_upload']
-        if upload_files <> '':
+        if upload_files != '':
             try:
                 art.photo = upload_files.value
                 art.clean_photo()
-                self.write('success')
             except:
-                self.write('failed')
                 pass
         #self.write(len(art.photo))
         art.put()

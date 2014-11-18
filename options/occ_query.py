@@ -48,13 +48,13 @@ class OccOptionChain:
         except:
             return False
         self.option_chain = {}
-        data.readline()#clear: Series Search Results for
-        data.readline()#clear: blank line
-        data.readline()#clear: Products for this underlying symbol are traded on
+        data.readline()  # clear: Series Search Results for
+        data.readline()  # clear: blank line
+        data.readline()  # clear: Products for this underlying symbol are traded on
         self.trades_on = data.readline().split()
-        data.readline()#clear: blank line
-        data.readline()#clear: Series/contract Strike Open Interest
-        data.readline()#clear: ProductSymbol year Month Day Integer Dec C/P Call Put Position Limit	
+        data.readline()  # clear: blank line
+        data.readline()  # clear: Series/contract Strike Open Interest
+        data.readline()  # clear: ProductSymbol year Month Day Integer Dec C/P Call Put Position Limit
         for line in data.readlines():
             option_list = line.split()
             if option_list[0] == stock_symbol and len(option_list) == 11:

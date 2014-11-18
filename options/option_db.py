@@ -11,11 +11,19 @@ class Positions(ndb.Model):
 
     @staticmethod
     def save_position(uid, stock, position, vols, rate):
-        pos = Positions(uid=uid,
-                        stock=stock,
-                        position=position,
-                        rate=rate)
-        position_key = pos.put()
+        this_pos = Positions().retrieve_position(uid, stock)
+        if this_pos:
+            this_pos.position = position
+            this_pos.vols = vols
+            this_pos.rate = rate
+            position_key = this_pos.put()
+        else:
+            pos = Positions(uid=uid,
+                            stock=stock,
+                            position=position,
+                            vols=vols,
+                            rate=rate)
+            position_key = pos.put()
         return position_key
 
     @staticmethod
@@ -30,12 +38,12 @@ class Positions(ndb.Model):
 class OptionChain(ndb.Model):
     stock = ndb.StringProperty()
     option_chain = ndb.PickleProperty()
-    created = ndb.DateTimeProperty(auto_now = True)
+    created = ndb.DateTimeProperty(auto_now=True)
 
     @staticmethod
     def save_option_chain(stock, option_chain):
         chain = OptionChain(stock=stock,
-                            option_chain = option_chain)
+                            option_chain=option_chain)
         chain_key = chain.put()
         return chain_key
 

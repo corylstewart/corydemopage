@@ -1,5 +1,5 @@
 import copy
-import time
+
 
 class BlankBoard():
     def __init__(self):
@@ -10,14 +10,16 @@ class BlankBoard():
         self.squares = self._make_squares()
         self.groupings = [self.rows, self.cols, self.squares]
 
-    def _make_empty_board(self):
+    @staticmethod
+    def _make_empty_board():
         board = {}
         for row in xrange(9):
             for col in xrange(9):
                 board[str(row)+str(col)] = 0
         return board
 
-    def _make_squares(self):
+    @staticmethod
+    def _make_squares():
         square = []
         squares = []
         for y in xrange(0,3):
@@ -30,9 +32,8 @@ class BlankBoard():
         return squares
 
 
-
 class SolvePuzzle(BlankBoard):
-    def __init__(self,grid_str):
+    def __init__(self, grid_str):
         self.board = BlankBoard()
         self.grid_str = grid_str
         self._read_grid()
@@ -44,9 +45,8 @@ class SolvePuzzle(BlankBoard):
                        self._remove_sets,
                        self._remove_hidden_pairs]
 
-
     def _read_grid(self):
-        if len(self.grid_str) <> 81:
+        if len(self.grid_str) != 81:
             return
         puzzle_str = [[x for x in row] for row in 
                       [self.grid_str[i:i+9] for i in range(0,81,9)]]
@@ -56,7 +56,7 @@ class SolvePuzzle(BlankBoard):
 
     def _place_lists(self):
         board_with_lists = {}
-        for cell,value in self.board.board.items():
+        for cell, value in self.board.board.items():
             if value == 0:
                 board_with_lists[cell] = range(1,10)
             else:
@@ -72,7 +72,8 @@ class SolvePuzzle(BlankBoard):
             return False
         return self._apply_true_false(self._valid_count)
 
-    def valid_group(self,group):
+    @staticmethod
+    def valid_group(group):
         for i in xrange(1,10):
             if group.count(i) > 1:
                 return False
@@ -88,7 +89,8 @@ class SolvePuzzle(BlankBoard):
     def _make_group(self, grouping):
         return [self.board.board_with_lists[g] for g in grouping]
 
-    def _valid_count(self,group):
+    @staticmethod
+    def _valid_count(group):
         for i in xrange(1,10):
             if group.count(i) > 1:
                 return False
@@ -102,14 +104,16 @@ class SolvePuzzle(BlankBoard):
                 return False
         return True
 
-    def _remove_numbers(self,group):
+    @staticmethod
+    def _remove_numbers(group):
         for g in group:           
             if isinstance(g,int):
                 for other in group:
                     if isinstance(other,list) and g in other:
                         other.remove(g)
 
-    def _remove_lonely_numbers(self,group):
+    @staticmethod
+    def _remove_lonely_numbers(group):
         numbers_in_lists = []
         for g in group:
             if isinstance(g,list):
@@ -127,7 +131,8 @@ class SolvePuzzle(BlankBoard):
                         g.pop()
                     g.append(num)
 
-    def _remove_sets(self,group):
+    @staticmethod
+    def _remove_sets(group):
         seen_it = []
         for i in range(2,5):
             for g in group:
@@ -143,7 +148,8 @@ class SolvePuzzle(BlankBoard):
                                 if number in group[j]:
                                     group[j].remove(number)
 
-    def _remove_hidden_pairs(self,group):
+    @staticmethod
+    def _remove_hidden_pairs(group):
         locs = {}
         for i, g in enumerate(group):
             if isinstance(g,list):
@@ -171,7 +177,7 @@ class SolvePuzzle(BlankBoard):
                 self.board.board_with_lists[cell] = value[0]
                 self.board.board[cell] = value[0]
 
-    def _apply_maniputlation(self, f):
+    def _apply_manipulation(self, f):
         for group in self.board.groupings:
             for g in group:
                 f(self._make_group(g))
@@ -201,7 +207,7 @@ class SolvePuzzle(BlankBoard):
             while old <> self.board.board_with_lists:
                 old = copy.deepcopy(self.board.board_with_lists)
                 for layer in self.layers[:i+1]:
-                    self._apply_maniputlation(layer)
+                    self._apply_manipulation(layer)
         if not self.is_solved() and use_bf:
             self._make_solution_string()
             self.use_brute_force()

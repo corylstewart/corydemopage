@@ -1,6 +1,8 @@
 import sys, httplib, urllib
-
-#this module was written by Oleg Larin the original code can be found at https://github.com/gurch101/StockScraper/blob/master/stockretriever.py
+'''
+this module was written by Oleg Larin the original code can be found at
+https://github.com/gurch101/StockScraper/blob/master/stockretriever.py
+'''
 
 try: import simplejson as json
 except ImportError: import json
@@ -15,22 +17,18 @@ FINANCE_TABLES = {'quotes': 'yahoo.finance.quotes',
                  'sectors': 'yahoo.finance.sectors',
                  'industry': 'yahoo.finance.industry'}
 
+
 class YQLQuery(object):
+    def __init__(self):
+        self.connection = httplib.HTTPConnection('query.yahooapis.com')
 
-	def __init__(self):
-		self.connection = httplib.HTTPConnection('query.yahooapis.com')
-
-
-
-	def execute(self, yql):
-		queryString = urllib.urlencode({'q': yql, 'format': 'json', 'env': DATATABLES_URL})
-		self.connection.request('GET', PUBLIC_API_URL + '?' + queryString)
-		return json.loads(self.connection.getresponse().read())
-
+    def execute(self, yql):
+        queryString = urllib.urlencode({'q': yql, 'format': 'json', 'env': DATATABLES_URL})
+        self.connection.request('GET', PUBLIC_API_URL + '?' + queryString)
+        return json.loads(self.connection.getresponse().read())
 
 
 class QueryError(Exception):
-
     def __init__(self, value):
         self.value = value
 
@@ -38,30 +36,31 @@ class QueryError(Exception):
         return repr(self.value)
         
 
-
 class StockRetriever(YQLQuery):
     """A wrapper for the Yahoo! Finance YQL api."""
                      
     def __init__(self):
         super(StockRetriever, self).__init__()
 
-    def __format_symbol_list(self, symbolList):
+    @staticmethod
+    def __format_symbol_list(symbolList):
         return ",".join(["\""+stock+"\"" for stock in symbolList])
 
-    def __is_valid_response(self, response, field):
+    @staticmethod
+    def __is_valid_response(response, field):
         return 'query' in response and 'results' in response['query'] \
             and field in response['query']['results']
     
-    def __validate_response(self, response, tagToCheck):
-        if self.__is_valid_response(response, tagToCheck):
-            quoteInfo = response['query']['results'][tagToCheck]
+    def __validate_response(self, response, tag_to_check):
+        if self.__is_valid_response(response, tag_to_check):
+            quote_info = response['query']['results'][tag_to_check]
         else:
             if 'error' in response:
                 raise QueryError('YQL query failed with error: "%s".' 
                     % response['error']['description'])
             else:
                 raise QueryError('YQL response malformed.')
-        return quoteInfo
+        return quote_info
        
     def get_current_info(self, symbolList, columnsToRetrieve='*'):
         """Retrieves the latest data (15 minute delay) for the 
@@ -71,11 +70,9 @@ class StockRetriever(YQLQuery):
         symbols = self.__format_symbol_list(symbolList)
 
         yql = 'select %s from %s where symbol in (%s)' \
-              %(columns, FINANCE_TABLES['quotes'], symbols)
+              % (columns, FINANCE_TABLES['quotes'], symbols)
         response = super(StockRetriever, self).execute(yql)
         return self.__validate_response(response, 'quote')
-
-
     
     def get_historical_info(self, symbol):
         """Retrieves historical stock data for the provided symbol.

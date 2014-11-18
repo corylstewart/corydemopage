@@ -1,9 +1,9 @@
 import stockretriever as sr
 import json
 import urllib2
-import time
 import csv
 import datetime
+
 
 class YahooQuery:
 

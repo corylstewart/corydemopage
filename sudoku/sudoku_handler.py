@@ -2,9 +2,10 @@ from EnhancedHandler import EnhancedHandler as EH
 import sudoku_db as SDB
 from board import SolvePuzzle
 
+
 class SudokuHtmlCell:
     '''Takes as input the location of a cell and its value to create an object
-    with the atrributes for that paticular cell.'''
+    with the attributes for that particular cell.'''
     def __init__(self, loc, value):
         self.value = value
         self.loc = loc
@@ -20,13 +21,13 @@ class SudokuHtmlCell:
         
     def make_td_class(self):
         td_class = ''
-        if self.i in [0,3,6]:
+        if self.i in [0, 3, 6]:
             td_class += 'top'
         elif self.i == 8:
             td_class += 'bot'
         else:
             td_class += 'mid'
-        if self.j in [0,3,6]:
+        if self.j in [0, 3, 6]:
             td_class += 'left'
         elif self.j == 8:
             td_class += 'rght'
@@ -41,7 +42,7 @@ class SudokuHtmlCell:
             return 'sudoku-cell full-cell'
 
     def make_in_type(self):
-        if self.value <> '0':
+        if self.value != '0':
             return 'readonly value='+self.value
         else:
             return 'maxlength=1 onblur=remove_space(this)'
@@ -50,7 +51,8 @@ class SudokuHtmlCell:
 class SudokuHtmlBuilder:
     '''Takes as input a puzzle string and returns a 9X9 arrays of SudokuHtmlCell
     object based on the puzzle string'''
-    def build_html(self,puzzle):
+    @staticmethod
+    def build_html(puzzle):
         cells = []
         for i in range(9):
             cells.append([])
@@ -112,10 +114,13 @@ class CreateDB(EH.EnhancedHandler):
                     db.put_puzzle(puzzle[1], puzzle[0], puzzle[2])
             self.write('done')
 
+
 class GetPuzzle(EH.EnhancedHandler):
     def get(self):
-        puzzle = SDB.SudokuDb().get_puzzle_by_solution('300000080700003052502708000000025070080430000000007090000000006430056007200000300')
+        p_str = '300000080700003052502708000000025070080430000000007090000000006430056007200000300'
+        puzzle = SDB.SudokuDb().get_puzzle_by_solution(p_str)
         self.write(puzzle)
+
 
 class ClearDB(EH.EnhancedHandler):
     def get(self):

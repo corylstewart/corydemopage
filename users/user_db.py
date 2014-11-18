@@ -7,16 +7,19 @@ import secret
 
 from google.appengine.ext import ndb
 
+
 class User(ndb.Model):
     user_name = ndb.StringProperty(required=True)
     pw_hash = ndb.StringProperty(required=True)
     email = ndb.StringProperty()
-    created = ndb.DateTimeProperty(auto_now_add = True)
+    created = ndb.DateTimeProperty(auto_now_add=True)
 
-    def by_id(self, user_id):
+    @staticmethod
+    def by_id(user_id):
         return User.get_by_id(user_id)
 
-    def by_name(self, name):
+    @staticmethod
+    def by_name(name):
         user = User.query(User.user_name == name)
         if user.count() > 0:
             for u in user:
@@ -24,10 +27,11 @@ class User(ndb.Model):
         else:
             return False
 
-    def register(self, name, pw_hash, email = None):
-        user = User(user_name = name,
-                    pw_hash = pw_hash,
-                    email = email)
+    @staticmethod
+    def register(name, pw_hash, email=None):
+        user = User(user_name=name,
+                    pw_hash=pw_hash,
+                    email=email)
         user_key = user.put()
         return user_key
 
@@ -52,7 +56,8 @@ class SecureValue:
         if secure_value == self.make_secure_value(value):
             return value
 
-    def make_salt(self, length=5):
+    @staticmethod
+    def make_salt(length=5):
         return ''.join(random.choice(letters) for x in range(length))
 
     def make_pw_hash(self, name, pw, salt=None):
@@ -67,15 +72,17 @@ class SecureValue:
 
 
 class ValidInputs:
-
-    def valid_user_name(self, user_name):
+    @staticmethod
+    def valid_user_name(user_name):
         USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
         return user_name and USER_RE.match(user_name)
 
-    def valid_password(self, password):
+    @staticmethod
+    def valid_password(password):
         PASS_RE = re.compile(r"^.{3,20}$")
         return password and PASS_RE.match(password)
- 
-    def valid_email(self, email):
+
+    @staticmethod
+    def valid_email(email):
         EMAIL_RE  = re.compile(r"^[\S]+@[\S]+\.[\S]+$")
         return not email or EMAIL_RE.match(email)

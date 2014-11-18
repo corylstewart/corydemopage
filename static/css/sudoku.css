@@ -129,7 +129,44 @@ table, td
 
 .topleft
 {
-	border-top: black solid 2px;
-	border-left: black solid 2px;
+	border-top: black solid 2px !important;
+	border-left: black solid 2px !important;
 }
 
+.topmidl
+{
+	border-top: black solid 2px !important;
+}
+
+.toprght
+{
+    border-top: black solid 2px !important;
+	border-right: black solid 2px !important;
+}
+
+.midleft
+{
+	border-left: black solid 2px !important;
+}
+
+.midrght
+{
+	border-right: black solid 2px !important;
+}
+
+.botleft
+{
+	border-bottom: black solid 2px !important;
+	border-left: black solid 2px !important;
+}
+
+.botmidl
+{
+	border-bottom: black solid 2px !important;
+}
+
+.botrght
+{
+    border-bottom: black solid 2px !important;
+	border-right: black solid 2px !important;
+}

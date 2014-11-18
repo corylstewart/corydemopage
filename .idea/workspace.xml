@@ -35,6 +35,16 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="option-chain.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/option-chain.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="156.26923" vertical-offset="4386" max-vertical-offset="4998">
+              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="position_retriever.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/options/position_retriever.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -71,7 +81,6 @@
         <option value="$PROJECT_DIR$/static/option.css" />
         <option value="$PROJECT_DIR$/static/sudoku.css" />
         <option value="$PROJECT_DIR$/EnhancedHandler/EnhancedHandler.py" />
-        <option value="$PROJECT_DIR$/art_collection/gql_to_spreadsheet.py" />
         <option value="$PROJECT_DIR$/templates/show_art.html" />
         <option value="$PROJECT_DIR$/static/css/style.css" />
         <option value="$PROJECT_DIR$/templates/add_art_to_database.html" />
@@ -85,6 +94,7 @@
         <option value="$PROJECT_DIR$/options/option_db.py" />
         <option value="$PROJECT_DIR$/options/option_handler.py" />
         <option value="$PROJECT_DIR$/options/option_memcache.py" />
+        <option value="$PROJECT_DIR$/art_collection/gql_to_spreadsheet.py" />
       </list>
     </option>
   </component>
@@ -177,6 +187,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="options" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sudoku" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="corydemopage" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="art_collection" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -646,14 +670,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/welcome.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.10083037" vertical-offset="0" max-vertical-offset="3145">
-          <caret line="5" column="63" selection-start-line="5" selection-start-column="63" selection-end-line="5" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/css/sudoku.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.66743386" vertical-offset="1528" max-vertical-offset="2397">
@@ -746,30 +762,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sudoku.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.061445784" vertical-offset="0" max-vertical-offset="1275">
-          <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/art_collection/gql_to_spreadsheet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.1150748" vertical-offset="0" max-vertical-offset="1649">
-          <caret line="66" column="23" selection-start-line="66" selection-start-column="23" selection-end-line="66" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/option-chain.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38915664" vertical-offset="0" max-vertical-offset="4998">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/atom/auth.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="869">
@@ -829,6 +821,46 @@
           <folding>
             <element signature="e#601#615#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/welcome.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.5839415" vertical-offset="2597" max-vertical-offset="3145">
+          <caret line="5" column="63" selection-start-line="5" selection-start-column="63" selection-end-line="5" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/option-chain.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="156.26923" vertical-offset="4386" max-vertical-offset="4998">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sudoku.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.317757" vertical-offset="0" max-vertical-offset="1275">
+          <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gdata/docs/data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="11679">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/art_collection/gql_to_spreadsheet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36236933" vertical-offset="676" max-vertical-offset="1649">
+          <caret line="61" column="8" selection-start-line="61" selection-start-column="8" selection-end-line="61" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>

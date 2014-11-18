@@ -60,9 +60,9 @@ class GqlToSpreadsheet(EH.EnhancedHandler):
                     photo = BytesIO(piece.scaled_photo)
                     newResource = gdata.docs.data.Resource(title=f_name)
                     media = gdata.data.MediaSource(file_handle=photo,
-                                                   content_type = content_type,
-                                                   content_length = int(len(str(piece.scaled_photo))),
-                                                   file_name = f_name)
+                                                   content_type=content_type,
+                                                   content_length=int(len(str(piece.scaled_photo))),
+                                                   file_name=f_name)
                     emptyDocument = push_client.CreateResource(newResource, media=media)
                 except:
                     pass
@@ -78,7 +78,7 @@ class GqlToSpreadsheet(EH.EnhancedHandler):
         except:
             pass
 
-        headers = {'title':1, 'location':2, 'value':3, 'photo':4}
+        headers = {'title': 1, 'location': 2, 'value': 3, 'photo': 4}
         for header in headers:
             try:
                 entry = spr_client.UpdateCell(row=1, col=headers[header], inputValue=header, 
@@ -87,13 +87,13 @@ class GqlToSpreadsheet(EH.EnhancedHandler):
                 pass
 
         for i, piece in enumerate(pieces):
-            dict = dict()
-            dict['title'] = piece.title
-            dict['location'] = piece.location
-            dict['value'] = str(piece.value)
-            dict['photo'] = str('id: ' + str(piece.key.id()))
+            dic = dict()
+            dic['title'] = piece.title
+            dic['location'] = piece.location
+            dic['value'] = str(piece.value)
+            dic['photo'] = str('id: ' + str(piece.key.id()))
             try:
-                entry = spr_client.InsertRow(dict, spreadsheet_key, worksheet_id)
+                entry = spr_client.InsertRow(dic, spreadsheet_key, worksheet_id)
             except:
                 pass
             

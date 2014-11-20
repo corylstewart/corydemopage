@@ -46,11 +46,11 @@ function calc_greeks(CP, spot, strike, vol, t, r) {
         vega: 0,
         value_theta: 0,
         t_1: t - (1/(364*2)),
-        theta: 0,
+        theta: 0
     }
     o.value = BlackScholes(CP, spot, strike, t, r, vol);
     o.value_spot_1 = BlackScholes(CP, o.spot_1, strike, t, r, vol);
-    o.delta = interpolate(spot, o.spot_1, o.value, o.value_spot_1)
+    o.delta = interpolate(spot, o.spot_1, o.value, o.value_spot_1);
     o.value_spot_2 = BlackScholes(CP, o.spot_2, strike, t, r, vol);
     o.delta_1 = interpolate(o.spot_1, o.spot_2, o.value_spot_1, o.value_spot_2);
     o.gamma = interpolate(spot, o.spot_1, o.delta, o.delta_1);
@@ -69,15 +69,15 @@ function interpolate(spot1, spot2, val1, val2) {
 
 function make_vol_skew() {
     var spot = parseFloat(document.getElementById('stock_price_id').value);
-    for (option in option_chain) {
+    for (var option in option_chain) {
         if (option_chain[option]['CP'] == 'C') {
             var strike = parseFloat(option_chain[option]['strike_price']);
             var spot_vol = parseFloat(document.getElementById('spot_vol_'.concat(option_chain[option]['exp_date_str'])).value);
             var slope = parseFloat(document.getElementById('slope_'.concat(option_chain[option]['exp_date_str'])).value);
             var smile = parseFloat(document.getElementById('smile_'.concat(option_chain[option]['exp_date_str'])).value);
-            var vol = spot_vol + (spot - strike) * slope + Math.abs(spot - strike) * smile
-            var vol = spot_vol + (spot - strike) * slope + Math.abs(spot - strike) * smile
-            elem = document.getElementById(option.concat('_vol'))
+            var vol = spot_vol + (spot - strike) * slope + Math.abs(spot - strike) * smile;
+            var vol = spot_vol + (spot - strike) * slope + Math.abs(spot - strike) * smile;
+            var elem = document.getElementById(option.concat('_vol'));
             if (elem) {
                 elem.value = vol
             }
@@ -102,7 +102,7 @@ function place_greeks() {
     var price = document.getElementById('stock_price_id').value;
     var now = new Date();
     var today = new Date(now.toDateString());
-    for (option in option_chain) {
+    for (var option in option_chain) {
         if (option_chain[option]['CP'] == 'C') {
             var f_option = option;
             var o_type = '_call';
@@ -166,7 +166,7 @@ function get_price_from_bar_chart() {
     var elem = document.getElementsByClassName('headerPrice');
     if (elem) {
         var price_text = elem[0].firstChild.textContent.replace('$', '').replace(/\t/g, '');
-        var stock_price_elem = document.getElementById('stock_price_id')
+        var stock_price_elem = document.getElementById('stock_price_id');
         if (stock_price_elem) {
             stock_price_elem.value = price_text;
         }
@@ -175,12 +175,13 @@ function get_price_from_bar_chart() {
 
 function check_show_dividends_old() {
     var elem = document.getElementById('show_dividends');
+    var TF;
     if (elem) {
         if (elem.checked) {
-            var TF = 'none';
+            TF = 'none';
         }
         else {
-            var TF = '';
+            TF = '';
         }
         for (var i = 0; i < projected_dividends.length; i++) {
             var row_elem = document.getElementById('dividend_row_'.concat(projected_dividends[i][0]));
@@ -205,8 +206,8 @@ function check_show_dividends() {
 }
 
 function check_use_random_ticks() {
-    var elem = document.getElementById('use_random_ticks')
-    setInterval(make_stock_tick, 1000);
+    var elem = document.getElementById('use_random_ticks');
+    var myTimer = setInterval(make_stock_tick, 1000);
 
     function make_stock_tick() {
         if (elem) {
@@ -214,7 +215,7 @@ function check_use_random_ticks() {
                 var tick_range = 5;
                 var price_elem = document.getElementById('stock_price_id');
                 var tick = (Math.floor((Math.random() * (tick_range + 1) * 2) - tick_range)) / 100;
-                spot = parseFloat(price_elem.value) + tick;
+                var spot = parseFloat(price_elem.value) + tick;
                 if (spot <= 0) {
                     spot = .01
                 }
@@ -222,7 +223,7 @@ function check_use_random_ticks() {
                 do_stock_tick();
             }
             else {
-                clearInterval()
+                clearInterval(myTimer);
             }
         }
     }
@@ -231,14 +232,14 @@ function check_use_random_ticks() {
 function check_show_strike() {
     for (var i = 0; i < ordered_option_symbol_list.length; i++) {
         var option = ordered_option_symbol_list[i];
-        var limit_strikes_check = document.getElementById('show_limited_strikes')
+        var limit_strikes_check = document.getElementById('show_limited_strikes');
         var this_exp = option_chain[option]["exp_date_str"];
         var exp_elem = document.getElementById(this_exp.concat('_checkbox'));
         var this_row = document.getElementById(option.concat('_row'));
         var this_strike = document.getElementById(option.concat('_call_delta'));
         if (exp_elem && this_row && this_strike && limit_strikes_check) {
             var delta = this_strike.value;
-            var disp = 'none'
+            var disp = 'none';
             if (((delta < .75 && delta > .25) || !limit_strikes_check.checked) && exp_elem.checked) {
                 disp = ''
             }
@@ -252,18 +253,19 @@ function calc_position_greeks() {
     for (exp in vols_by_month) {
         position_dictionary[exp] = { 'vega': 0, 'delta': 0, 'gamma': 0, 'theta': 0 };
     }
-    for (option in option_chain) {
+    var CP;
+    for (var option in option_chain) {
         if (option.slice(-9, -8) == 'C') {
-            var CP = '_call';
+            CP = '_call';
         }
         else {
-            var CP = '_put';
+            CP = '_put';
         }
         var this_pos = document.getElementById(option.concat(CP, '_position'));
         if (this_pos) {
-            var option_pos = parseInt(this_pos.value)
+            var option_pos = parseInt(this_pos.value);
             if (option_pos != 0) {
-                var exp = option_chain[option]['exp_date_str']
+                var exp = option_chain[option]['exp_date_str'];
                 position_dictionary[exp]['vega'] += option_pos * parseFloat(document.getElementById(option.concat(CP, '_vega')).value)*100;
                 position_dictionary[exp]['delta'] += (option_pos * parseFloat(document.getElementById(option.concat(CP, '_delta')).value))*100;
                 position_dictionary[exp]['gamma'] += option_pos * parseFloat(document.getElementById(option.concat(CP, '_gamma')).value)*100;
@@ -272,7 +274,7 @@ function calc_position_greeks() {
         }
     }
     for (exp in vols_by_month) {
-        for (greek in position_dictionary[exp]) {
+        for (var greek in position_dictionary[exp]) {
             position_dictionary['totals'][greek] += position_dictionary[exp][greek];
         }
     }

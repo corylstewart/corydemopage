@@ -113,6 +113,7 @@ class PieceEditHandler(EH.EnhancedHandler):
                       'piece_artist': art.artist,
                       'piece_location': art.location,
                       'piece_medium': art.medium,
+                      'piece_value': art.value,
                       'piece_purchase_price': art.purchase_price,
                       'piece_app': art.appraised_by,
                       'piece_description': art.description}
